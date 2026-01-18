@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Onboarding Playbook – Live Moderator</title>
+  <style>
+    :root{
+      --paper:#ffffff;
+      --ink:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --accent:#2563eb;
+      --accent2:#0ea5e9;
+      --danger:#b91c1c;
+      --dangerBg: rgba(185,28,28,.07);
+      --shadow: 0 16px 46px rgba(2,6,23,.14);
+      --radius: 18px;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 420px at 18% -10%, rgba(37,99,235,.18), transparent 60%),
+        radial-gradient(900px 320px at 82% -10%, rgba(14,165,233,.16), transparent 60%),
+        #f8fafc;
+    }
+
+    .shell{
+      max-width: 1080px;
+      margin:0 auto;
+      padding: 28px 18px 64px;
+    }
+
+    /* Topbar */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 14px;
+      backdrop-filter: blur(10px);
+      z-index: 20;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      min-width: 0;
+    }
+    .logo{
+      width:46px;height:46px;border-radius:14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid;place-items:center;
+      color:#fff;font-weight:800;
+      box-shadow: 0 10px 26px rgba(37,99,235,.32);
+      flex: 0 0 auto;
+    }
+    .brand .text{
+      min-width: 0;
+    }
+    .brand h1{
+      font-size:16px;margin:0;line-height:1.2;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .brand p{
+      font-size:12px;margin:2px 0 0;color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .actions{ display:flex; gap:10px; align-items:center; }
+    .btn{
+      border-radius:14px;
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:650;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      box-shadow: 0 8px 22px rgba(2,6,23,.08);
+      transition: transform .08s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px rgba(2,6,23,.10); border-color: rgba(37,99,235,.28); }
+    .btn.primary{
+      color:#fff;
+      border:none;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 30px rgba(37,99,235,.22);
+    }
+
+    /* Hero */
+    .hero{
+      margin-top:18px;
+      padding: 26px 26px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .hero h2{
+      margin:0 0 6px;
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+    .hero p{
+      margin:0;
+      font-size:15px;
+      line-height:1.6;
+      color:var(--muted);
+      max-width: 70ch;
+    }
+    .hero .mini{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(226,232,240,.95);
+      background: rgba(248,250,252,.95);
+      color: var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .hero .mini b{ color: var(--ink); }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:20px;
+      margin-top:20px;
+    }
+    @media(min-width: 980px){
+      .grid{ grid-template-columns: 320px 1fr; }
+    }
+
+    /* TOC */
+    .toc{
+      padding:18px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 92px;
+      height: fit-content;
+    }
+    .toc h3{
+      margin:0 0 12px;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color: var(--ink);
+    }
+    .toc a{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 12px;
+      text-decoration:none;
+      font-size:13px;
+      color:var(--ink);
+      border: 1px solid transparent;
+    }
+    .toc a:hover{
+      background: rgba(37,99,235,.08);
+      border-color: rgba(37,99,235,.18);
+    }
+    .toc .n{
+      width:22px;height:22px;border-radius:999px;
+      background: rgba(37,99,235,.12);
+      border: 1px solid rgba(37,99,235,.18);
+      display:grid;place-items:center;
+      font-size:12px;
+      color: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    /* Content paper */
+    .paper{
+      padding: 26px 26px;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.96);
+      border:1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    section{ scroll-margin-top: 120px; }
+
+    h3.section-title{
+      margin: 18px 0 10px;
+      font-size: 18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      letter-spacing:-.01em;
+    }
+    .num{
+      width:30px;height:30px;border-radius:999px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      color:#fff;
+      display:grid;place-items:center;
+      font-size:13px;font-weight:800;
+      flex: 0 0 auto;
+    }
+
+    h4{
+      margin: 12px 0 6px;
+      font-size:14px;
+      color: var(--ink);
+    }
+    p{
+      margin: 0 0 10px;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    ul{ margin: 8px 0 14px 18px; padding:0; }
+    li{ margin: 6px 0; font-size: 15px; line-height: 1.6; }
+
+    .callout{
+      margin: 12px 0 14px;
+      padding: 14px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(185,28,28,.22);
+      background: var(--dangerBg);
+    }
+    .callout .label{
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--danger);
+      margin: 0 0 6px;
+      font-weight: 800;
+    }
+    .callout .text{
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .divider{
+      height:1px;
+      background: var(--line);
+      margin: 22px 0;
+    }
+
+    .footer{
+      margin-top:22px;
+      padding: 16px 18px;
+      border-radius: var(--radius);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.9);
+      text-align:center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Print */
+    @media print{
+      body{ background:#fff; }
+      .topbar, .toc, .footer{ display:none !important; }
+      .shell{ max-width:none; padding:0; }
+      .hero, .paper{ box-shadow:none; border: 1px solid #ddd; }
+      section{ scroll-margin-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">OB</div>
+        <div class="text">
+          <h1>Onboarding Playbook – Live Moderator</h1>
+          <p>Verbindlicher Arbeitsstandard</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="document.getElementById('toc').scrollIntoView({behavior:'smooth'})">Inhalt</button>
+        <button class="btn primary" onclick="window.print()">PDF / Drucken</button>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div>
+        <h2>Willkommen</h2>
+        <p>Bei Fragen wende dich bitte an deinen zuständigen Teammanager</p>
+      </div>
+      <div class="mini" title="Hinweis">
+        <span>🔒</span> <b>Interner Gebrauch</b> • Weitergabe an Dritte nicht erlaubt
+      </div>
+    </div>
+
+    <div class="grid">
+      <nav class="toc" id="toc" aria-label="Inhaltsverzeichnis">
+        <h3>Inhalt</h3>
+        <a href="#s1"><span class="n">1</span>Grundverständnis der Rolle</a>
+        <a href="#s2"><span class="n">2</span>Pflicht vor jeder Schicht</a>
+        <a href="#s3"><span class="n">3</span>Kommunikationskanäle</a>
+        <a href="#s4"><span class="n">4</span>Öffentlicher Stream (Public Show)</a>
+        <a href="#s5"><span class="n">5</span>User hinzufügen</a>
+        <a href="#s6"><span class="n">6</span>Private Nachrichten (DMs)</a>
+        <a href="#s7"><span class="n">7</span>Private Sessions</a>
+        <a href="#s8"><span class="n">8</span>Spionieren</a>
+        <a href="#s9"><span class="n">9</span>Exklusive Show</a>
+        <a href="#s10"><span class="n">10</span>Ziele, Tip-Menü & Rad</a>
+        <a href="#s11"><span class="n">11</span>Massennachrichten an Freunde</a>
+        <a href="#s12"><span class="n">12</span>Moderation & Sicherheit</a>
+        <a href="#s13"><span class="n">13</span>Grundprinzipien</a>
+        <a href="#s14"><span class="n">14</span>Verbindlichkeit</a>
+      </nav>
+
+      <main class="paper">
+        <section id="s1">
+          <h3 class="section-title"><span class="num">1</span>Grundverständnis der Rolle</h3>
+          <p>Als Moderator arbeitest du zeitgleich mit dem Model, während es live auf StripChat ist.<br/>
+          Du bist nicht passiv, nicht unterstützend „nebenbei“, sondern aktiv steuernd.</p>
+
+          <p>Deine Rolle ist eine Kombination aus:</p>
+          <ul>
+            <li>Umsatzmanager</li>
+            <li>Background-Operator</li>
+            <li>Kommunikationsschnittstelle</li>
+            <li>Account-Schutz</li>
+          </ul>
+
+          <p>Ziel deiner Arbeit:<br/>
+            ➡️ maximaler Umsatz<br/>
+            ➡️ stabile Streams<br/>
+            ➡️ Schutz des Accounts<br/>
+            ➡️ Entlastung des Models
+          </p>
+
+          <p>Wenn du nicht aktiv steuerst, verlierst du Umsatz.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s2">
+          <h3 class="section-title"><span class="num">2</span>Pflicht vor jeder Schicht (nicht verhandelbar)</h3>
+
+          <h4>VPN &amp; IP</h4>
+          <p>Da unsere Moderatoren überwiegend aus der Türkei arbeiten, gilt:</p>
+          <ul>
+            <li>VPN vor Streamstart aktivieren</li>
+            <li>Standort: Deutschland, Österreich oder Schweiz</li>
+            <li>IP-Check durchführen</li>
+          </ul>
+
+          <div class="callout">
+            <div class="label">Wichtig</div>
+            <div class="text">❗ Ohne korrektes VPN und bestätigten IP-Check darf keine Schicht begonnen werden.</div>
+          </div>
+
+          <p>Fehler hier führen zu:</p>
+          <ul>
+            <li>Reichweitenverlust</li>
+            <li>Account-Problemen</li>
+            <li>möglichen Sperren</li>
+          </ul>
+
+          <h4>Discord – Erreichbarkeit</h4>
+          <p>Während der gesamten Schicht:</p>
+          <ul>
+            <li>permanenter Aufenthalt im vorgegebenen Discord-Channel</li>
+            <li>jederzeit abrufbereit</li>
+            <li>sofortige Reaktion bei Nachrichten oder Calls</li>
+          </ul>
+
+          <p>Eine Schicht ohne aktive Discord-Präsenz gilt als nicht ordnungsgemäß angetreten.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s3">
+          <h3 class="section-title"><span class="num">3</span>Kommunikationskanäle</h3>
+
+          <h4>Telegram (Model-Kommunikation)</h4>
+          <p>Telegram ist der direkte Steuerungskanal zum Model.</p>
+          <ul>
+            <li>kurze, klare Nachrichten</li>
+            <li>keine Diskussionen während des Streams</li>
+            <li>Fokus auf Aktionen, Timing, Hinweise</li>
+          </ul>
+
+          <h4>Discord (intern)</h4>
+          <p>Discord ist für:</p>
+          <ul>
+            <li>Support</li>
+            <li>Eskalationen</li>
+            <li>Rückfragen</li>
+            <li>Kontrolle</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s4">
+          <h3 class="section-title"><span class="num">4</span>Öffentlicher Stream (Public Show)</h3>
+          <p>Der öffentliche Stream ist nicht der Hauptumsatz, sondern die Vorstufe.</p>
+
+          <p>Ziele des Public Streams:</p>
+          <ul>
+            <li>Traffic aufbauen</li>
+            <li>neue User beobachten</li>
+            <li>zahlungskräftige User identifizieren</li>
+            <li>Übergänge in Private/Exklusiv vorbereiten</li>
+          </ul>
+
+          <p>Deine Aufgaben:</p>
+          <ul>
+            <li>neue Zuschauer beobachten</li>
+            <li>User mit vielen Tokens erkennen</li>
+            <li>diese Namen im Telegram-Channel posten</li>
+            <li>Model liest die Namen im Stream vor</li>
+            <li>Chat sauber halten</li>
+            <li>Ziele, Tip-Menü und Rad aktiv managen</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s5">
+          <h3 class="section-title"><span class="num">5</span>User hinzufügen (Pflicht)</h3>
+          <p>Während des gesamten Streams:</p>
+          <ul>
+            <li>alle neuen User als Freunde hinzufügen</li>
+            <li>Ausnahme: graue User (graue Namensfarbe)</li>
+          </ul>
+
+          <p>Warum das Pflicht ist:</p>
+          <ul>
+            <li>höhere Wiederkehr</li>
+            <li>größere Fanbase</li>
+            <li>langfristiger Umsatz</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s6">
+          <h3 class="section-title"><span class="num">6</span>Private Nachrichten (DMs) – extrem wichtig</h3>
+          <p>Private Nachrichten sind einer der wichtigsten Umsatzhebel.</p>
+
+          <p>Während der gesamten Schicht müssen DMs:</p>
+          <ul>
+            <li>regelmäßig und aktiv geprüft werden</li>
+          </ul>
+
+          <p>Viele User:</p>
+          <ul>
+            <li>schreiben privat wegen Interesse an einer Private Session</li>
+            <li>trauen sich öffentlich nicht zu fragen</li>
+          </ul>
+
+          <p>Deine Aufgabe:</p>
+          <ul>
+            <li>bei Interesse kurzen Dialog aufbauen</li>
+            <li>Dialog synchron zum Livestream führen (damit es vor der Kamera nicht auffällt)</li>
+            <li>gezielt auf eine Private oder Exklusiv-Session hinarbeiten</li>
+            <li>bei klarer Kaufabsicht das Model über Telegram informieren</li>
+          </ul>
+
+          <div class="callout">
+            <div class="label">Hinweis</div>
+            <div class="text">❗ Wer DMs ignoriert, verschenkt Umsatz.</div>
+          </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s7">
+          <h3 class="section-title"><span class="num">7</span>Private Sessions – größter Umsatzhebel</h3>
+          <p>Private Sessions haben immer höchste Priorität.</p>
+
+          <p><strong>Grundsatz:</strong></p>
+          <p><strong>Je länger die Private Session, desto höher der Umsatz.</strong></p>
+
+          <p>Pflichten des Moderators:</p>
+          <ul>
+            <li>sofort die Tokenanzahl im Telegram-Channel posten</li>
+            <li>wenn Tokens ausgeblendet sind: realistische Einschätzung der Dauer</li>
+            <li>das Model aktiv unterstützen</li>
+            <li>Vorschläge machen, um die Session zu verlängern</li>
+            <li>darauf achten, dass nichts hektisch abläuft</li>
+          </ul>
+
+          <p>Der Moderator ist auch während der Private Session aktiv, nicht passiv.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s8">
+          <h3 class="section-title"><span class="num">8</span>Spionieren (nur in Private Sessions)</h3>
+          <p>Spionieren gibt es ausschließlich während laufender Private Sessions.</p>
+          <ul>
+            <li>normale User aus dem Public Stream können zuschauen</li>
+            <li>sie zahlen Tokens pro Minute</li>
+            <li>Spione sind zahlende User</li>
+          </ul>
+
+          <p><strong>Bedeutung:</strong></p>
+          <ul>
+            <li>zusätzlicher Umsatz pro Minute</li>
+            <li>hohe Wahrscheinlichkeit, dass Spione selbst eine Private oder Exklusiv starten</li>
+          </ul>
+
+          <p><strong>Spione:</strong></p>
+          <ul>
+            <li>nicht blockieren</li>
+            <li>nicht stören</li>
+            <li>Session ruhig &amp; hochwertig weiterführen</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s9">
+          <h3 class="section-title"><span class="num">9</span>Exklusive Show</h3>
+          <p>Exklusiv-Shows sind:</p>
+          <ul>
+            <li>1-zu-1 Sessions</li>
+            <li>höherer Minutenpreis</li>
+            <li>Premium-Umsatz</li>
+          </ul>
+
+          <p><strong>Rolle des Moderators:</strong></p>
+          <ul>
+            <li>Budget und Dauer im Blick behalten</li>
+            <li>Model unterstützen, den exklusiven Wert auszuspielen</li>
+            <li>Session nicht unnötig verkürzen</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s10">
+          <h3 class="section-title"><span class="num">10</span>Ziele, Tip-Menü &amp; Rad – Umsetzungspflicht</h3>
+          <p>Wenn:</p>
+          <ul>
+            <li>ein Trinkgeld gegeben wird</li>
+            <li>ein Rad gedreht wird</li>
+            <li>ein Ziel erreicht wird</li>
+          </ul>
+
+          <p>ist der Moderator verpflichtet zu prüfen, dass das Model die Aktion auch wirklich umsetzt.</p>
+
+          <div class="callout">
+            <div class="label">Wichtig</div>
+            <div class="text">❗ Nicht umgesetzte Aktionen können: als Täuschung gelten • zu Verwarnungen führen • Account-Sperren verursachen</div>
+          </div>
+
+          <p>Der Moderator ist hier der Account-Schutz.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s11">
+          <h3 class="section-title"><span class="num">11</span>Massennachrichten an Freunde</h3>
+          <p>Massennachrichten sind ein starker Traffic-Hebel.</p>
+
+          <p><strong>Pflicht:</strong></p>
+          <ul>
+            <li>immer bei Abendschichten ab 20:00 Uhr</li>
+            <li>immer, wenn ein Model nur einmal am Tag live geht</li>
+          </ul>
+
+          <p><strong>Wenn ein Model mehrmals täglich live geht:</strong></p>
+          <ul>
+            <li>Massennachricht nur 1× pro Tag</li>
+            <li>dann ausschließlich abends (ca. 20–22 Uhr)</li>
+          </ul>
+
+          <p>StripChat erlaubt nur eine Massennachricht pro Tag.</p>
+
+          <p><strong>Der Text kann sehr einfach sein:</strong></p>
+          <ul>
+            <li>„Hi“</li>
+            <li>„Ich bin jetzt live“</li>
+            <li>„Komm in meinen Stream“</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s12">
+          <h3 class="section-title"><span class="num">12</span>Moderation &amp; Sicherheit</h3>
+          <p>Der Moderator sorgt dafür, dass:</p>
+          <ul>
+            <li>der Chat respektvoll bleibt</li>
+            <li>beleidigende oder anstößige User:</li>
+            <li>stummgeschaltet</li>
+            <li>entfernt</li>
+            <li>blockiert werden</li>
+          </ul>
+
+          <p>Das Wohlbefinden des Models hat oberste Priorität.</p>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s13">
+          <h3 class="section-title"><span class="num">13</span>Grundprinzipien (merken)</h3>
+          <ul>
+            <li>Public Stream bringt Traffic – Private &amp; Exklusiv bringen Geld</li>
+            <li>DMs sind Verkaufschancen</li>
+            <li>Private Sessions haben Priorität vor allem anderen</li>
+            <li>Alles, was bezahlt wird, muss geliefert werden</li>
+            <li>Ohne VPN &amp; IP-Check keine Schicht</li>
+            <li>Moderator = Umsatztreiber und Account-Schutz</li>
+          </ul>
+        </section>
+
+        <div class="divider"></div>
+
+        <section id="s14">
+          <h3 class="section-title"><span class="num">14</span>Verbindlichkeit</h3>
+          <p>Dieses Playbook ist verbindlich.<br/>
+          Mit Antritt der Arbeit bestätigt der Moderator, dass:</p>
+          <ul>
+            <li>alle Inhalte gelesen wurden</li>
+            <li>sie verstanden wurden</li>
+            <li>sie eingehalten werden</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer">
+      Tipp: Für ein PDF oben rechts auf <b>PDF / Drucken</b> klicken und „Als PDF speichern“ auswählen.
+    </div>
+  </div>
+</body>
+</html>
