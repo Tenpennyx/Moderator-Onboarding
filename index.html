@@ -283,6 +283,16 @@
       .hero, .paper{ box-shadow:none; border: 1px solid #ddd; }
       section{ scroll-margin-top: 0; }
     }
+  
+
+    /* Mobile fix: TOC sticky off (prevents mobile sticky/scroll bugs) */
+    @media (max-width: 979px){
+      .toc{
+        position: relative;
+        top: auto;
+      }
+    }
+
   </style>
 </head>
 <body>
